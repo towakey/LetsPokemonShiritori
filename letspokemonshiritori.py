@@ -9,21 +9,27 @@ with open(pokedex_path,encoding='utf-8') as f:
 
 # print(pokedex[0]['name'][0])
 
-# https://qiita.com/tag1216/items/b2765e9e87025c01e57f
 shiritori = {}
 for word in pokedex:
-    # これで頭文字順に追加はできる
-    # shiritori.setdefault(word['name'][0],[]).append(word['name'])
     set_pokemon = {}
 
+    # 基本的には最後の文字を使用する
     lastplace = -1
+
+    # ニドラン♂、ニドラン♀の時
     if word['name'][lastplace] == '♂' or word['name'][lastplace] == '♀':
         set_pokemon['lastword'] = 'ス'
+    # ポリゴン2の時
+    elif word['name'][lastplace] == '2':
+        set_pokemon['lastword'] = 'ツ'
+    # ポリゴンZの時
+    elif word['name'][lastplace] == 'Z':
+        set_pokemon['lastword'] = 'ト'
     else:
-        # https://note.nkmk.me/python-re-regex-character-type/
-        # カタカナ小文字の判別
+        # 最後の文字が長音の時は、直前の文字を使用する
         if word['name'][lastplace] == 'ー':
             lastplace = -2
+        # カタカナの小文字は大文字にする
         if word['name'][lastplace] == "ァ":
             set_pokemon['lastword'] = "ア"
         elif word['name'][lastplace] == "ィ":
@@ -49,13 +55,16 @@ for word in pokedex:
         elif word['name'][lastplace] == "ヶ":
             set_pokemon['lastword'] = "ケ"
         else:
+            # それ以外の場合はそのまま使用する
             set_pokemon['lastword'] = word['name'][lastplace]
-
+    # フラグのデフォルト値は0
     set_pokemon['flag'] = 0
+
+    # 頭文字の配列が無ければ連想配列として初期化
     if word['name'][0] not in shiritori:
         shiritori[word['name'][0]] = {}
+    # ポケモンの名前で配列を保存
     shiritori[word['name'][0]][word['name']] = set_pokemon
-    # print(shiritori[word['name'][0]][word['name']])
 
-print(shiritori['ハ'])
+print(shiritori['ア'])
 
