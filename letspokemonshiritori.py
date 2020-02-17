@@ -57,8 +57,8 @@ for word in pokedex:
         else:
             # それ以外の場合はそのまま使用する
             set_pokemon['lastword'] = word['name'][lastplace]
-    # フラグのデフォルト値は0
-    set_pokemon['flag'] = 0
+    # フラグのデフォルト値はFalse
+    set_pokemon['flag'] = False
 
     # 頭文字の配列が無ければ連想配列として初期化
     if word['name'][0] not in shiritori:
@@ -66,5 +66,17 @@ for word in pokedex:
     # ポケモンの名前で配列を保存
     shiritori[word['name'][0]][word['name']] = set_pokemon
 
-print(shiritori['ア'])
+# print(shiritori['ア'])
+
+shiritori_word = "ア"
+shiritori_flag = True
+while shiritori_flag:
+    # print(shiritori[start_word].keys)
+    for word in shiritori[shiritori_word].values():
+        print(word.keys)
+        if not word['flag']:
+            shiritori_word = word['lastword']
+
+        print(word)
+    # shiritori_flag = False
 
