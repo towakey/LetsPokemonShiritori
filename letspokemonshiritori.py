@@ -1,5 +1,6 @@
 # coding: utf-8
 import json
+import copy
 
 def main():
     pokedex_path = 'pokedex.json'
@@ -71,7 +72,10 @@ def main():
     shiritori_max = []
     shiritori_word = "ア"
     cnt = 0
-    flag = shiritori_run(shiritori,shiritori_word,shiritori_list,True,shiritori_max)
+    flag,shiritori_max = shiritori_run(shiritori,shiritori_word,shiritori_list,True,shiritori_max)
+    print(shiritori_max)
+    with open("shiritori.txt",mode="w",encoding="utf-8") as f:
+        f.write(shiritori_max)
 
 def shiritori_run(shiritori,shiritori_word,shiritori_list,flag,shiritori_max):
     # 頭文字のポケモンがいるか検査する
@@ -81,11 +85,14 @@ def shiritori_run(shiritori,shiritori_word,shiritori_list,flag,shiritori_max):
                 shiritori[shiritori_word][key]['flag'] = True
                 # shiritori_word = word['lastword']
                 shiritori_list.append(key)
-                flag = shiritori_run(shiritori,word['lastword'],shiritori_list,flag,shiritori_max)
+                flag,shiritori_max = shiritori_run(shiritori,word['lastword'],shiritori_list,flag,shiritori_max)
                 # もし返ってきたらFalseになっていたら…
                 if flag == False:
                     # 現在の状態を保存
-                    shiritori_max = shiritori_list[:]
+                    # shiritori_max = shiritori_list[:]
+                    print(str(len(shiritori_list))+" : "+str(len(shiritori_max)))
+                    if int(len(shiritori_list)) > int(len(shiritori_max)):
+                        shiritori_max = copy.deepcopy(shiritori_list)
                     # 最後の名前を削除
                     del shiritori_list[-1]
                     # フラグを戻す
@@ -93,8 +100,8 @@ def shiritori_run(shiritori,shiritori_word,shiritori_list,flag,shiritori_max):
 
     else:
         flag = False
-    return flag
-5
+    return flag,shiritori_max
+
 
 if __name__ == "__main__":
     main()
